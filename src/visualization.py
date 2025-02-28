@@ -28,7 +28,7 @@ def visualize_heatmap(results: Dict[Tuple, Dict[str, float]], metrics: List[str]
             matrix[i, j] = stats[metric]
         
         sns.heatmap(matrix, annot=True, xticklabels=formatted_labels, yticklabels=formatted_labels, cmap="coolwarm", ax=axes[idx])
-        axes[idx].set_title(f"Heatmap of {metric}")
+        axes[idx].set_title("{metric}")
         axes[idx].set_xlabel("Player 2 Sequence")
         axes[idx].set_ylabel("Player 1 Sequence")
         axes[idx].tick_params(axis='y', rotation=0)
