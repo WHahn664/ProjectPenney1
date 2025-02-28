@@ -6,4 +6,4 @@ num_decks_to_generate = 100000
 results, seeds = play_all_games(num_decks_to_generate)
 
 # Creating heatmaps for Player 2 probabilities
-visualize_heatmap(results, ["Player 2 Win Rate", "Draw Rate"])
+visualize_heatmap(results, ["Player 2 Win %", "Draw %"])
