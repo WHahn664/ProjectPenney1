@@ -31,7 +31,7 @@ def visualize_heatmap(results: Dict[Tuple, Dict[str, float]], metrics: List[str]
         axes[idx].set_title(f"Heatmap of {metric}")
         axes[idx].set_xlabel("Player 2 Sequence")
         axes[idx].set_ylabel("Player 1 Sequence")
-        axes[idx].tick_params(axis='y', rotation=0)  # Horizontal labels
+        axes[idx].tick_params(axis='y', rotation=0)
     
     plt.tight_layout()
     plt.show()
