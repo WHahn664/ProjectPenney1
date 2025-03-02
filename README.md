@@ -6,7 +6,7 @@ This project focuses on simulating many games of penney. Penney is a game where 
 
 Files that are included:
 
-'src (Source code)'
+'src/' (Source Code)
 
 - datagen.py: This file contains the code that generates and shuffles the decks. It also contains code that generates all the possible combinations of sequences both players can choose.
 
@@ -22,5 +22,5 @@ Files that are included:
 
 Steps to analyze the probabilities:
 
-1. Download all the files in the 'src' folder. Or just the ProjectPenney1.ipynb if you want to run it in one file.
+1. Download all the files in the 'src/' folder. Or just the ProjectPenney1.ipynb if you want to run it in one file.
 2. Use the code in test.py to run the 100,000 simulations of Penney's game and to test the visualizations of those results. If using the ipynb file, run each block of code to get the desired results.
