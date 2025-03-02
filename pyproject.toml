@@ -1,0 +1,11 @@
+[project]
+name = "projectpenney"
+version = "0.1.0"
+description = "Analyzing at least 100,000 games of Penney to compare two methods of scoring: tricks and totals by cards"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.0",
+    "numpy>=2.2.2",
+    "pandas>=2.2.3",
+]
