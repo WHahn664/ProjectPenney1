@@ -1,4 +1,4 @@
-# ProjectPenney1
+# Project Penney
 
 This project focuses on simulating many games of penney. Penney is a game where two players each choose a certain 3-bit sequence based on a combination of black and red. The deck is then drawn until there is a sequence that matches with one of the player's chosen sequence. The player also gets to keep the previously drawn cards that led to their matching sequence. The process repeats until you run out of cards. The sequence each player chooses cannot be the same. The game is scored by two methods: tricks and totals by cards. A trick is where the player found a matching sequence to their desired sequence, which counts as one trick. Totals by cards is scored by how many cards a player received for each trick.
 
