@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from datagen import generate_sequences
 from helpers import debugger_factory
 from typing import Dict, Tuple, List
-
+import itertools
 @debugger_factory()  
 def visualize_heatmap(results: Dict[Tuple, Dict[str, float]], metrics: List[str], save_path: str = "heatmap"):
     """
