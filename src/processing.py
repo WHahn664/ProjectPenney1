@@ -50,7 +50,7 @@ def generate_1_game(deck: np.ndarray, player1_seq: Tuple[str, str, str], player2
 
     return p1_tricks, p2_tricks, p1_total_cards, p2_total_cards
 
-
+@debugger_factory()
 def simulate_games(
     num_decks: int = 1000000,
     existing_results: Optional[Dict[Tuple, Dict[str, float]]] = None,
