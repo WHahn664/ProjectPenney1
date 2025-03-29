@@ -4,79 +4,119 @@ from datagen import generate_sequences, get_n_decks
 from helpers import debugger_factory
 from datagen import HALF_DECK_SIZE
 import numpy as np
+import json
+from typing import Dict, Tuple, List, Optional
+import csv
 
-
-def generate_1_game(deck: np.ndarray, player1_seq: Tuple[int, int, int], player2_seq: Tuple[int, int, int]) -> Tuple[int, int, int, int]:
+def generate_1_game(deck: np.ndarray, player1_seq: Tuple[str, str, str], player2_seq: Tuple[str, str, str]) -> Tuple[int, int, int, int]:
     """
-    This function plays one game. Each player chooses a sequence. And the player whose sequence appears first in the deck is the winner.
+    Simulates one game of Penney.
+    - Players choose their sequences.
+    - Flip cards one at a time until a player's sequence occurs.
+    - The player who gets a match is awarded one trick and all previous cards plus the 3 matching cards.
     """
     if player1_seq == player2_seq:
-        raise ValueError("Players cannot choose the same sequence.") # This ensures that both players cannot choose the same sequence
+        raise ValueError("Players cannot choose the same sequence.")
 
-    # These two lines convert the deck and sequences into strings so that we can easily search within them.
-    deck_str = ''.join(map(str, deck)) 
-    p1_str, p2_str = ''.join(map(str, player1_seq)), ''.join(map(str, player2_seq))
+    p1_str, p2_str = ''.join(player1_seq), ''.join(player2_seq)
+    p1_tricks, p2_tricks = 0, 0
+    p1_total_cards, p2_total_cards = 0, 0
+    collected_cards = 0  
+    current_sequence = []
 
-    # These two lines count how many times each player's desired sequence shows up in the deck (tricks).
-    p1_count = deck_str.count(p1_str)
-    p2_count = deck_str.count(p2_str)
+    for card in deck:
+        current_sequence.append(card)
+        collected_cards += 1
 
-    # These two lines counts the total amount of cards used for each player's desired sequence (totals cards)
-    p1_total_cards = sum(len(p1_str) for i in range(len(deck) - 2) if deck_str[i:i+3] == p1_str)
-    p2_total_cards = sum(len(p2_str) for i in range(len(deck) - 2) if deck_str[i:i+3] == p2_str)
+        
+        if len(current_sequence) >= 3:
+            trick_str = ''.join(current_sequence[-3:])
 
-    return p1_count, p2_count, p1_total_cards, p2_total_cards
+            
+            if trick_str == p1_str:
+                p1_tricks += 1
+                p1_total_cards += collected_cards
+                collected_cards = 0 
+                current_sequence = [] 
+                continue
+
+            
+            if trick_str == p2_str:
+                p2_tricks += 1
+                p2_total_cards += collected_cards
+                collected_cards = 0  
+                current_sequence = []  
+                continue
+
+    return p1_tricks, p2_tricks, p1_total_cards, p2_total_cards
 
 
-@debugger_factory()
-def simulate_games(num_decks: int = 100000) -> Tuple[Dict[Tuple, Dict[str, float]], Dict[Tuple, List[int]]]:
+def simulate_games(
+    num_decks: int = 1000000,
+    existing_results: Optional[Dict[Tuple, Dict[str, float]]] = None,
+    existing_seeds: Optional[List[int]] = None,
+    save_prefix: Optional[str] = None,
+    save_to_file: bool = False
+) -> Tuple[Dict[Tuple, Dict[str, float]], List[int]]:
     """
-    This function simulates all games for each deck in num_decks. It also calculates win percentages and draw percentages.
+    Simulates multiple games of Penney.
     """
-    sequences = generate_sequences()    # Creates all 3-bit sequences
-    results = {}                        # Stores win and draw probabilities
-    seeds = {}                          # Stores each deck's seed
+    sequences = list(itertools.product('BR', repeat=3))
+    results = existing_results if existing_results else {}
+    seeds = existing_seeds if existing_seeds else []
 
-    # This loop will help us iterate over all possible pairs of sequences (56 possible combinations).
-    for player1_seq, player2_seq in itertools.combinations(sequences, 2):
-        decks = get_n_decks(num_decks)  # This allows us to get the shuffled decks
+    new_seeds = []
 
-        # These four lines will help us keep track of the tricks, total cards, and draws
-        p1_wins_trick, p2_wins_trick = 0, 0
-        p1_wins_total, p2_wins_total = 0, 0
-        draws1 = 0
-        draws2 = 0
+    for i in range(num_decks):
+        seed = np.random.randint(0, 2**32 - 1)
+        new_seeds.append(seed)
+        rng = np.random.default_rng(seed)
+        deck = rng.choice(['B', 'R'], size=52)
 
-        # This loop plays all each deck
-        for seed, deck in decks:
+        for player1_seq, player2_seq in itertools.combinations(sequences, 2):
             p1_count, p2_count, p1_cards, p2_cards = generate_1_game(deck, player1_seq, player2_seq)
 
-            # These five linese determine the winner based on the number of tricks
-            if p1_count > p2_count:
-                p1_wins_trick += 1
-            elif p2_count > p1_count:
-                p2_wins_trick += 1
-            else:
-                draws1 += 1
+            for a, b, p1, p2 in [(player1_seq, player2_seq, p1_count, p2_count),
+                                 (player2_seq, player1_seq, p2_count, p1_count)]:
 
-            # These four lines determine the winner by comparing the total amount of cards used by each player
-            if p1_cards > p2_cards:
-                p1_wins_total += 1
-            elif p2_cards > p1_cards:
-                p2_wins_total += 1
-            else:
-                draws2 += 1
+                key = (a, b)
+                if key not in results:
+                    results[key] = {
+                        "Player 2 Win % (Trick)": 0,
+                        "Player 2 Win % (Total)": 0,
+                        "Draw % (Trick)": 0,
+                        "Draw % (Total)": 0,
+                        "games": 0
+                    }
 
-        # These two blocks of code help us store our probabilities.
-        results[(player1_seq, player2_seq)] = {
-            "Player 2 Win % (Trick)": p2_wins_trick / num_decks,
-            "Player 2 Win % (Total)": p2_wins_total / num_decks,
-            "Draw %": draws1 / num_decks
-        }
-        results[(player2_seq, player1_seq)] = {
-            "Player 2 Win % (Trick)": p1_wins_trick / num_decks,
-            "Player 2 Win % (Total)": p1_wins_total / num_decks,
-            "Draw %": draws2 / num_decks
-        }
+                res = results[key]
+                res["Player 2 Win % (Trick)"] += int(p2 > p1)
+                res["Player 2 Win % (Total)"] += int(p2_cards > p1_cards)
+                res["Draw % (Trick)"] += int(p2 == p1)
+                res["Draw % (Total)"] += int(p2_cards == p1_cards)
+                res["games"] += 1
+
+    
+    for stats in results.values():
+        g = stats["games"]
+        if g > 0:
+            stats["Player 2 Win % (Trick)"] /= g
+            stats["Player 2 Win % (Total)"] /= g
+            stats["Draw % (Trick)"] /= g
+            stats["Draw % (Total)"] /= g
+
+    seeds += new_seeds
+
+    
+    if save_to_file and save_prefix:
+        with open(f"{save_prefix}_results.json", "w") as f:
+            json.dump({str(k): v for k, v in results.items()}, f, indent=2)
+
+        with open(f"{save_prefix}_seeds.csv", "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["seed"])
+            writer.writerows([[s] for s in seeds])
+
+        print(f"Saved {len(seeds)} seeds and results to: {save_prefix}_*.json/csv")
 
     return results, seeds
