@@ -46,4 +46,5 @@ ProjectPenney#1.ipynb: This is just an extra file that contains the full code al
 Steps to analyze the probabilities:
 
 1. Download all the files in the 'src/' folder. Or just the ProjectPenney#1.ipynb if you want to run it in one file.
-2. Use the code in test.py to run the 1,000,000 simulations of Penney's game and to test the visualizations of those results. If using the ipynb file, run each block of code to get the desired results.
+2. Download Main.py
+3. Use the code in Main.py to run the 1,000,000 simulations of Penney's game and to test the visualizations of those results. If using the ipynb file, run each block of code to get the desired results.
