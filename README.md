@@ -21,6 +21,9 @@ Files that are included:
 - Main.py: This file contains testing code that produces the visualizations and the list of seeds used.
 - ProjectPenney.ipynb: This is just an extra file that contains the full code all in one file for your convenience.
 
+'stored_results/' (Stored probabilites)
+
+- 
 ---
 
 Steps to analyze the probabilities:
