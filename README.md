@@ -15,7 +15,7 @@ Files that are included:
 - processing.py: This file contains code that plays all the games for each deck.
 
 - visualization.py: This file contains code that visualizes all the winning/drawing probabilites for player 2 using both methods (tricks and totals by cards).
-- test.py: This file contains testing code that produces the visualizations and the list of seeds used.
+- Main.py: This file contains testing code that produces the visualizations and the list of seeds used.
 - ProjectPenney.ipynb: This is just an extra file that contains the full code all in one file for your convenience.
 
 ---
