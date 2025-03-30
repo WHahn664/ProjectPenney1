@@ -17,16 +17,28 @@ Files that are included:
 
 - processing.py: This file contains code that plays all the games for each deck.
 
-- visualization.py: This file contains code that visualizes all the winning/drawing probabilites for player 2 using both methods (tricks and totals by cards).
-- Main.py: This file contains testing code that produces the visualizations and the list of seeds used.
-- ProjectPenney.ipynb: This is just an extra file that contains the full code all in one file for your convenience.
+- visualization.py: This file contains code that visualizes all the winning/drawing probabilites using both methods (tricks and totals by cards).
 
 'stored_results/' (Stored probabilites)
 
-- 
+- results_results.csv: This file contains the probability results for each deck.
+
+'stored_seeds/' (Stored seeds)
+
+- results_seeds.csv: This file contains all the seeds used for each deck.
+
+'visualizations/' (Heatmap Visualizations)
+
+- heatmap_player_2_Win_%_(Total).svg: This file shows the heatmap that was produced from the visulization.py file. Specifically, it shows a heatmap visualization containing the winning/drawing probabilites using the total cards method.
+- heatmap_player_2_Win_%_(Trick).svg: This file shows the heatmap that was produced from the visulization.py file. Specifically, it shows a heatmap visualization containing the winning/drawing probabilites using the trick method.
+
+Main.py: This file contains testing code that produces the visualizations and the list of seeds used.
+
+ProjectPenney#1.ipynb: This is just an extra file that contains the full code all in one file for your convenience.
+
 ---
 
 Steps to analyze the probabilities:
 
-1. Download all the files in the 'src/' folder. Or just the ProjectPenney1.ipynb if you want to run it in one file.
+1. Download all the files in the 'src/' folder. Or just the ProjectPenney#1.ipynb if you want to run it in one file.
 2. Use the code in test.py to run the 1,000,000 simulations of Penney's game and to test the visualizations of those results. If using the ipynb file, run each block of code to get the desired results.
