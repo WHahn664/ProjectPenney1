@@ -1,6 +1,7 @@
 from processing import simulate_games
 from visualization import visualize_heatmap
-
+from datagen import load_results_from_csv
+from datagen import load_seeds_from_csv
 #The two lines of commented code below is for when you want to create new decks from scratch without augmenting the existing data.
 #Uncomment these two lines of code if you want to do so. Also, comment out the rest of the code below it.
 #results1, seeds1 = simulate_games(num_decks=1000000)
