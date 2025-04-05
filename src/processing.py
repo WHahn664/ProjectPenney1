@@ -15,12 +15,17 @@ def generate_1_game(deck: np.ndarray, player1_seq: Tuple[str, str, str], player2
     - The player who gets a match is awarded one trick and all previous cards plus the 3 matching cards.
     """
 
+    #This line of code converts each player's sequences into strings.
     p1_str, p2_str = ''.join(player1_seq), ''.join(player2_seq)
+    #These two lines of code help us keep track of how many tricks and cards each player won.
     p1_tricks, p2_tricks = 0, 0
     p1_total_cards, p2_total_cards = 0, 0
+    #This will allow us to keep track of the number of cards flipped before a sequence match.
     collected_cards = 0
+    #This will us to keep track of the running sequence of the flipped cards.
     current_sequence = []
-
+    
+    #This loop allows us to play the game of Penney by flipping one card at a time. Also, keeps track of number of tricks and total cards won for each player.
     for card in deck:
         current_sequence.append('B' if card == 0 else 'R')
         collected_cards += 1
@@ -45,6 +50,7 @@ def generate_1_game(deck: np.ndarray, player1_seq: Tuple[str, str, str], player2
     return p1_tricks, p2_tricks, p1_total_cards, p2_total_cards
 
 @debugger_factory()
+
 def simulate_games(
     num_decks: int,
     existing_results: Dict[Tuple, Dict[str, float]] = None,
@@ -53,10 +59,13 @@ def simulate_games(
     save_to_file: bool = True
 ) -> Tuple[Dict[Tuple, Dict[str, float]], List[int]]:
     """
-    Simulates multiple games of Penney.
+    Simulates multiple games of Penney. This function can also augmenting existing results if you so choose. 
+    Outputs the results and seeds used.
     """
-
+    #This will generate all possible 3-letter red/black sequences.
     sequences = generate_sequences()
+
+    # If there is no existing data, then it will initialize new dictionaries. Otherwise, it will use the existing results and seeds.
     if existing_results is None:
         results = {(p1, p2): {"Player 2 Win % (Trick)": 0.0,
                               "Player 2 Win % (Total)": 0.0,
@@ -66,34 +75,56 @@ def simulate_games(
         used_seeds = []
     else:
         results = existing_results
-        used_seeds = existing_seeds
+        used_seeds = existing_seeds.copy() if existing_seeds else []
+        existing_total = len(used_seeds)
+        for key in results:
+            for metric in results[key]:
+                results[key][metric] *= existing_total
+        
 
+    #This will allow us to generate new decks and seeds.
     decks = get_n_decks(num_decks)
+    
+    #These loops will allow us to loop over each deck. These loops will also allow us to play multiple games of Penney for each deck.
+    #These loops will also allow us to determine the winner based on the number tricks or the number of total cards for each deck.
     for seed, deck in decks:
         used_seeds.append(seed)
         for p1 in sequences:
             for p2 in sequences:
                 p1_tricks, p2_tricks, p1_cards, p2_cards = generate_1_game(deck, p1, p2)
 
-                total_tricks = p1_tricks + p2_tricks
-                total_cards = p1_cards + p2_cards
+                if (p1, p2) not in results:
+                    results[(p1, p2)] = {
+                        "Player 2 Win % (Trick)": 0.0,
+                        "Player 2 Win % (Total)": 0.0,
+                        "Draw % (Trick)": 0.0,
+                        "Draw % (Total)": 0.0
+                    }
+                
                 if p1_tricks > p2_tricks:
-                    results[(p1, p2)]["Draw % (Trick)"] += 0
+                    pass
                 elif p1_tricks < p2_tricks:
                     results[(p1, p2)]["Player 2 Win % (Trick)"] += 1
                 else:
                     results[(p1, p2)]["Draw % (Trick)"] += 1
                 
                 if p1_cards > p2_cards:
-                    results[(p1, p2)]["Draw % (Total)"] += 0
+                    pass
                 elif p1_cards < p2_cards:
                     results[(p1, p2)]["Player 2 Win % (Total)"] += 1
                 else:
                     results[(p1, p2)]["Draw % (Total)"] += 1
+
+
+    #These 4 lines of code will allow us to determine the probabilities.
+    total_decks = len(used_seeds)
     for key in results:
         for metric in results[key]:
-            results[key][metric] /= num_decks
+            results[key][metric] /= total_decks
+    
 
+    #These blocks of code will save our probabilities/results as a 'results_results.csv' file. 
+    #These blocks of code will also save our used seeds as a 'results_seeds.csv' file
     if save_to_file:
         csv_filename = f"{save_prefix}_results.csv"
         with open(csv_filename, mode='w', newline='') as csvfile:
