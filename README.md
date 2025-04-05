@@ -44,7 +44,13 @@ ProjectPenney#1.ipynb: This is just an extra file that contains the full code al
 ---
 
 Steps to analyze the probabilities:
+1. Download all the files in the 'src/' folder.
+2. Download all the .csv files in both the 'stored_results/' folder and the 'stored_seeds' folder.
+3. Download Main.py.
+4. Use the code in Main.py to augment the existing data with additonal new decks. Please read the comments in the file for more information.
 
-1. Download all the files in the 'src/' folder. Or just the ProjectPenney#1.ipynb if you want to run it in one file.
-2. Download Main.py
-3. Use the code in Main.py to run the 1,000,000 simulations of Penney's game and to test the visualizations of those results. If using the ipynb file, run each block of code to get the desired results.
+Optional:
+If you want to use the ProjectPenney#1.ipynb file instead:
+1. Download all .csv files in both the 'stored_results/' folder and the 'stored_seeds' folder.
+2. Download the ProjectPenney#1.ipynb file and run the code in jupyterhub. Please read the comments in the file for more information.
+
