@@ -3,7 +3,7 @@ import itertools
 import random
 from typing import List, Tuple, Dict
 from helpers import debugger_factory
-
+import csv
 HALF_DECK_SIZE = 26
 
 def get_init_deck(half_deck_size: int) -> np.ndarray:
