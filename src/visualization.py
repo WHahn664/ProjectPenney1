@@ -40,7 +40,7 @@ def visualize_heatmap(results: Dict[Tuple, Dict[str, float]], metrics: List[str]
             else:
                 win_pct = round(stats.get(metric, 0) * 100)
                 draw_metric = "Draw % (Trick)" if "Trick" in metric else "Draw % (Total)"
-                draw_pct = int(stats.get(draw_metric, 0) * 100)
+                draw_pct = round(stats.get(draw_metric, 0) * 100)
                 annotations[i, j] = f"{win_pct} ({draw_pct})"
                 matrix[i, j] = win_pct
 
