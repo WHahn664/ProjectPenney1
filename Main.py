@@ -1,17 +1,21 @@
 from processing import simulate_games
 from visualization import visualize_heatmap
 
-# This will simulate 1000000 games of penney
-results1, seeds1 = simulate_games(num_decks=1000000)
-visualize_heatmap(results1, ["Player 2 Win % (Trick)", "Player 2 Win % (Total)"], num_decks=1000000)
-# Augment with more decks by setting num_decks to the desired amount.
-# Uncomment the whole code below and comment out the two lines of code above.
-# Also, update num_decks in visualize_heatmap to reflect the total number of decks each time you add new ones.
-#results2, seeds2 = simulate_games(
-    #num_decks=100,
-    #existing_results=results1,
-    #existing_seeds=seeds1
-    
-#)
+#The two lines of commented code below is for when you want to create new decks from scratch without augmenting the existing data.
+#Uncomment these two lines of code if you want to do so. Also, comment out the rest of the code below it.
+#results1, seeds1 = simulate_games(num_decks=1000000)
+#visualize_heatmap(results1, ["Player 2 Win % (Trick)", "Player 2 Win % (Total)"], num_decks=1000000)
 
-#visualize_heatmap(results2, ["Player 2 Win % (Trick)", "Player 2 Win % (Total)"], num_decks=1000100)
+#These two lines of code allows us to load our existing data for augmentation.
+results_old = load_results_from_csv("results_results.csv")
+seeds_old = load_seeds_from_csv("results_seeds.csv")
+
+#These 4 lines of code below allows us to augment our existing data with any number of new decks. Simply change num_decks to whichever number you desire.
+results_new, seeds_new = simulate_games(
+    num_decks=100,
+    existing_results=results_old,
+    existing_seeds=seeds_old
+)
+#These two lines of code will allows us to update our heatmaps with the new decks.
+total_decks = len(seeds_new)
+visualize_heatmap(results_new, ["Player 2 Win % (Trick)", "Player 2 Win % (Total)"], num_decks=total_decks)
