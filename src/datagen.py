@@ -38,5 +38,41 @@ def get_n_decks(num_decks: int, num_cards: int = HALF_DECK_SIZE) -> List[Tuple[i
     
 
 def generate_sequences() -> List[Tuple[str, str, str]]:
-     """This function creates all possible combinations of 0s and 1s Generates all possible three-card sequences of 0s and 1s."""
+     """This function creates all possible combinations of 0s and 1s Generates all possible three-card sequences of Bs and Rs."""
      return list(itertools.product('BR', repeat=3))
+
+
+def load_results_from_csv(filepath: str) -> Dict[Tuple[str, str], Dict[str, float]]:
+    """
+    This function allows us to load the results_results.csv file containing all the results from multiple games of Penney.
+    This function is only used if we want augment existing data.
+    """
+    results = {}
+    with open(filepath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            p1 = tuple(row["Player 1"])  
+            p2 = tuple(row["Player 2"])  
+            if len(p1) != 3 or len(p2) != 3:
+                print(f"Skipping invalid row: {row}")
+                continue
+            results[(p1, p2)] = {
+                "Player 2 Win % (Trick)": float(row["Player 2 Win % (Trick)"]),
+                "Player 2 Win % (Total)": float(row["Player 2 Win % (Total)"]),
+                "Draw % (Trick)": float(row["Draw % (Trick)"]),
+                "Draw % (Total)": float(row["Draw % (Total)"])
+            }
+    return results
+def load_seeds_from_csv(filepath: str) -> List[int]:
+    """
+    This function allows us to load the results_seeds.csv file containg all the seeds used for each deck.
+    This function is only used if we want to augment existing data.
+    """
+    seeds = []
+    with open(filepath, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  
+        for row in reader:
+            seeds.append(int(row[0]))
+    return seeds
+
