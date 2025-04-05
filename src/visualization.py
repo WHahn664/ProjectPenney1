@@ -66,8 +66,8 @@ def visualize_heatmap(results: Dict[Tuple, Dict[str, float]], metrics: List[str]
         )
 
         #These two lines of code will label the axes.
-        ax.set_xlabel("Player 1 Sequence", fontsize=14, labelpad=15)
-        ax.set_ylabel("Player 2 Sequence", fontsize=14, labelpad=15)
+        ax.set_xlabel("Player 2 Sequence", fontsize=14, labelpad=15)
+        ax.set_ylabel("Player 1 Sequence", fontsize=14, labelpad=15)
 
         #These two lines of code will allow us to put ticks on our heatmaps.
         ax.set_xticklabels(formatted_labels, rotation=0, ha="center")
