@@ -2,13 +2,13 @@ from processing import simulate_games
 from visualization import visualize_heatmap
 from datagen import load_results_from_csv
 from datagen import load_seeds_from_csv
-#If you don't want to augment existing data:
+#If you don't want to the augment the existing data:
 #The two lines of commented code below is for when you want to create new decks from scratch without any existing data.
 #Uncomment these two lines of code if you want to do so. Also, comment out the rest of the code below it.
 #results1, seeds1 = simulate_games(num_decks=1000000)
 #visualize_heatmap(results1, ["Player 2 Win % (Trick)", "Player 2 Win % (Total)"], num_decks=1000000)
 
-#If you want to augment existing data:
+#If you want to augment the existing data:
 #These two lines of code allows us to load our existing data for augmentation. 
 results_old = load_results_from_csv("results_results.csv")
 seeds_old = load_seeds_from_csv("results_seeds.csv")
