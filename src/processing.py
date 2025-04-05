@@ -132,6 +132,7 @@ def simulate_games(
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for (p1, p2), stats in results.items():
+                stats_rounded = {metric: round(value, 3) if isinstance(value, float) else value for metric, value in stats.items()}
                 row = {
                     "Player 1": ''.join(p1),
                     "Player 2": ''.join(p2),
